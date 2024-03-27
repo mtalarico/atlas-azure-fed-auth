@@ -9,6 +9,7 @@
     "region": "East US",
     "human_user_upn": "example@domain.com",
     "human_user_display_name": "example human",
+    "human_user_password": "mongodb!sAwesome",
     "prefix": "something-unique",
     "aks_ns": "default"
   }

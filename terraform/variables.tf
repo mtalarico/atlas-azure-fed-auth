@@ -12,6 +12,7 @@ variable "azure" {
     region                  = string
     human_user_upn          = string
     human_user_display_name = string
+    human_user_password     = string
     prefix                  = string
     aks_ns                  = string
   })

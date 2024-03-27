@@ -44,5 +44,5 @@ resource "azuread_group" "human_group" {
 resource "azuread_user" "human_user" {
   user_principal_name = var.azure.human_user_upn
   display_name        = var.azure.human_user_display_name
-  password            = "mongodb!sAwesome"
+  password            = var.azure.human_user_password
 }
