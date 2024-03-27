@@ -2,16 +2,16 @@
 Terraform + Python code to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
 
 ## Prerequisites
-- [] Azure CLI
-- [] Terraform
-- [] Git
-- [] Kubectl
-- [] Org Owner for MongoDB Atlas Organization
-- [] Access to request resources on an active Azure Subscription
+- [ ] Azure CLI
+- [ ] Terraform
+- [ ] Git
+- [ ] Kubectl
+- [ ] Org Owner for MongoDB Atlas Organization
+- [ ] Access to request resources on an active Azure Subscription
 
 ## TODO
-- [] Automatically register Kubernetes provider
-- [] Private Endpoint setup for AKS and ASE
+- [ ] Automatically register Kubernetes provider
+- [ ] Private Endpoint setup for AKS and ASE
 - [x] ASE: Inject environment variables
 - [x] Automatically deploy pod
 - [x] AKS: Inject environment variables
