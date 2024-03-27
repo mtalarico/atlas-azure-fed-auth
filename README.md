@@ -42,7 +42,8 @@ terraform init
 terraform apply
 ```
 6. Wait to finish provisioning…
-7. Manually update federation settings for MongoDB Atlas to match app registration
+    - Note: ASE took on average 3.5 hours to provision, you can watch Godfather II during this time
+8. Manually update federation settings for MongoDB Atlas to match app registration
 
 
 ## Workforce
