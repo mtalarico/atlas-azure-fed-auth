@@ -1,0 +1,15 @@
+{
+  "mongodb_atlas": {
+    "region": "US_EAST",
+    "public_key": "xxxxxxxx",
+    "private_key": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "idp_id": "xxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "azure": {
+    "region": "East US",
+    "human_user_upn": "example@domain.com",
+    "human_user_display_name": "example human",
+    "prefix": "something-unique",
+    "aks_ns": "default"
+  }
+}
