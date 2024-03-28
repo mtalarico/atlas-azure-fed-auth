@@ -14,7 +14,7 @@ resource "mongodbatlas_cluster" "example_cluster" {
   replication_specs {
     num_shards = 1
     regions_config {
-      region_name     = var.mongodb_atlas.region
+      region_name     = var.atlas.region
       electable_nodes = 3
       priority        = 7
       read_only_nodes = 0
@@ -22,13 +22,13 @@ resource "mongodbatlas_cluster" "example_cluster" {
   }
   cloud_backup                 = true
   auto_scaling_disk_gb_enabled = true
-
-  provider_name               = "AZURE"
-  provider_instance_size_name = "M10"
+  paused                       = true
+  provider_name                = "AZURE"
+  provider_instance_size_name  = "M10"
 }
 
 resource "mongodbatlas_database_user" "example_human_user" {
-  username           = "${var.mongodb_atlas.idp_id}/${azuread_group.human_group.object_id}"
+  username           = "${var.atlas.idp_id}/${azuread_group.human_group.object_id}"
   project_id         = mongodbatlas_project.example_project.id
   auth_database_name = "admin"
   oidc_auth_type     = "IDP_GROUP"
@@ -40,7 +40,7 @@ resource "mongodbatlas_database_user" "example_human_user" {
 }
 
 resource "mongodbatlas_database_user" "example_programmatic_user" {
-  username           = "${var.mongodb_atlas.idp_id}/${azuread_group.programmatic_group.object_id}"
+  username           = "${var.atlas.idp_id}/${azuread_group.programmatic_group.object_id}"
   project_id         = mongodbatlas_project.example_project.id
   auth_database_name = "admin"
   oidc_auth_type     = "IDP_GROUP"

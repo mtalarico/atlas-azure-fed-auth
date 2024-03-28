@@ -1,8 +1,7 @@
 {
-  "mongodb_atlas": {
+  "atlas": {
     "region": "US_EAST",
-    "public_key": "xxxxxxxx",
-    "private_key": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "org_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
     "idp_id": "xxxxxxxxxxxxxxxxxxxxxxxx"
   },
   "azure": {

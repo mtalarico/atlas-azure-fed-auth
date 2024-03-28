@@ -12,9 +12,13 @@ terraform {
   }
 }
 
+provider "vault" {
+  address = "http://127.0.0.1:8200"
+}
+
 provider "mongodbatlas" {
-  public_key  = var.mongodb_atlas.public_key
-  private_key = var.mongodb_atlas.private_key
+  public_key  = data.vault_kv_secret.atlas_creds.data["public_key"]
+  private_key = data.vault_kv_secret.atlas_creds.data["private_key"]
 }
 
 provider "azurerm" {

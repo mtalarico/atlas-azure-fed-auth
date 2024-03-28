@@ -1,9 +1,8 @@
-variable "mongodb_atlas" {
+variable "atlas" {
   type = object({
-    region      = string
-    public_key  = string
-    private_key = string
-    idp_id      = string
+    region = string
+    org_id = string
+    idp_id = string
   })
 }
 
