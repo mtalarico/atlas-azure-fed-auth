@@ -16,6 +16,11 @@ provider "vault" {
   address = "http://127.0.0.1:8200"
 }
 
+
+data "vault_kv_secret" "atlas_creds" {
+  path = "personal/creds/tf"
+}
+
 provider "mongodbatlas" {
   public_key  = data.vault_kv_secret.atlas_creds.data["public_key"]
   private_key = data.vault_kv_secret.atlas_creds.data["private_key"]
