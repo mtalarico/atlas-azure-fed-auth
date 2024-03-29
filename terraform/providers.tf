@@ -18,7 +18,7 @@ provider "vault" {
 
 
 data "vault_kv_secret" "atlas_creds" {
-  path = "personal/creds/tf"
+  path = var.vault.api_key_path
 }
 
 provider "mongodbatlas" {

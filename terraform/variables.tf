@@ -1,3 +1,9 @@
+variable "vault" {
+  type = object({
+    api_key_path = string
+  })
+}
+
 variable "atlas" {
   type = object({
     region = string

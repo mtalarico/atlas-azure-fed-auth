@@ -1,4 +1,7 @@
 {
+  "vault": {
+    "api_key_path": "mongodbatlas/creds/tf-key"
+  },
   "atlas": {
     "region": "US_EAST",
     "org_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
