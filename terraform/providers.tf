@@ -9,6 +9,9 @@ terraform {
     mongodbatlas = {
       source = "mongodb/mongodbatlas"
     }
+    vault = {
+      source = "hashicorp/vault"
+    }
   }
 }
 
