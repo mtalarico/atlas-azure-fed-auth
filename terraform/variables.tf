@@ -1,5 +1,6 @@
 variable "vault" {
   type = object({
+    uri          = string
     api_key_path = string
   })
 }
