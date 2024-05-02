@@ -2,9 +2,6 @@ import os
 from azure.identity import DefaultAzureCredential
 from pymongo import MongoClient
 from pymongo.auth_oidc import OIDCCallback, OIDCCallbackContext, OIDCCallbackResult
-from dotenv import load_dotenv
-
-load_dotenv()
 
 APP_ID = os.environ["AZURE_APP_CLIENT_ID"]
 CLIENT_ID = os.environ["AZURE_IDENTITY_CLIENT_ID"]

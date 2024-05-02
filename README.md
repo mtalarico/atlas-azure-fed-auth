@@ -54,11 +54,11 @@ mongosh "${MONGODB_URI}/?authSource=%24external&authMechanism=MONGODB-OIDC&appNa
 
 
 ## Workload - ASE
-1. Open connection to ASE 
+1. Open connection to ASE
 ```
 az webapp create-remote-connection  --resource-group ${AZURE_PREFIX}-example-ase-rg --name ${AZURE_PREFIX}-example-ase-python-app
 ```
-2. Connect to ASE using port from step 1’s output
+2. Connect to ASE using port from step 1's output
 ```
 ssh root@127.0.0.1 -p ${OUTPUT_PORT}
 ```
@@ -82,6 +82,3 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 ```
 python3 oidc.py
 ```
-
-
-
