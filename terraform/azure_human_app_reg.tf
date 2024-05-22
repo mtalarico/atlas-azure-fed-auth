@@ -6,11 +6,6 @@ resource "azuread_application_registration" "human_app_reg" {
   group_membership_claims        = ["SecurityGroup"]
 }
 
-# resource "azuread_application_identifier_uri" "human_app_reg_uri" {
-#   application_id = azuread_application_registration.human_app_reg.id
-#   identifier_uri = "api://${azuread_application_registration.example_app.client_id}"
-# }
-
 resource "azuread_application_redirect_uris" "human_app_reg_redirects" {
   application_id = azuread_application_registration.human_app_reg.id
   type           = "PublicClient"
@@ -29,6 +24,10 @@ resource "azuread_application_optional_claims" "human_app_reg_claims" {
 
   access_token {
     name = "email"
+  }
+
+  access_token {
+    name = "upn"
   }
 }
 

@@ -11,14 +11,6 @@ resource "azuread_application_identifier_uri" "programmatic_app_reg_uri" {
   identifier_uri = "api://${azuread_application_registration.programmatic_app_reg.client_id}"
 }
 
-resource "azuread_application_redirect_uris" "programmatic_app_reg_redirects" {
-  application_id = azuread_application_registration.programmatic_app_reg.id
-  type           = "PublicClient"
-  redirect_uris = [
-    "http://localhost:27097/redirect"
-  ]
-}
-
 resource "azuread_application_optional_claims" "programmatic_app_reg_claims" {
   application_id = azuread_application_registration.programmatic_app_reg.id
 
@@ -26,19 +18,4 @@ resource "azuread_application_optional_claims" "programmatic_app_reg_claims" {
     name                  = "aud"
     additional_properties = ["use_guid"]
   }
-
-  access_token {
-    name = "email"
-  }
-}
-
-resource "azuread_application_api_access" "programmatic_app_reg_api" {
-  application_id = azuread_application_registration.programmatic_app_reg.id
-  api_client_id  = data.azuread_application_published_app_ids.well_known.result["MicrosoftGraph"]
-
-  scope_ids = [
-    data.azuread_service_principal.msgraph.oauth2_permission_scope_ids["email"],
-    data.azuread_service_principal.msgraph.oauth2_permission_scope_ids["profile"],
-    data.azuread_service_principal.msgraph.oauth2_permission_scope_ids["User.Read"]
-  ]
 }

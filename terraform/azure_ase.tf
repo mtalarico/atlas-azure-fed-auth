@@ -52,7 +52,6 @@ resource "azurerm_linux_web_app" "example_ase_webapp" {
   site_config {
     application_stack {
       python_version = 3.12
-      # docker_image_name = "aypexe/workload-test"
     }
   }
   app_settings = {
