@@ -1,5 +1,5 @@
 # atlas-azure-fed-auth
-Terraform + Python code to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
+Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
 
 ## Prerequisites
 - Azure CLI
@@ -53,7 +53,7 @@ mongosh "${MONGODB_URI}/?authSource=%24external&authMechanism=MONGODB-OIDC&appNa
 ```
 
 
-## Workload - ASE
+## Workload - ASE - Python
 1. Open connection to ASE
 ```
 az webapp create-remote-connection  --resource-group ${AZURE_PREFIX}-example-ase-rg --name ${AZURE_PREFIX}-example-ase-python-app
@@ -70,6 +70,25 @@ apt update && apt install git wget -y && pip3 install -r requirements.txt
 5. Run oidc.py
 ```
 python3 oidc.py
+```
+
+## Workload - ASE - Java
+1. (Optional) package JAR under `./java`
+```
+mvn clean package
+```
+3. Open connection to ASE
+```
+az webapp create-remote-connection  --resource-group ${AZURE_PREFIX}-example-ase-rg --name ${AZURE_PREFIX}-example-ase-python-app
+```
+3. Connect to ASE using port from step 1's output
+```
+ssh root@127.0.0.1 -p ${OUTPUT_PORT}
+```
+4. Copy over `oidc-0.0.1.jar`
+6. Run `oidc-0.0.1.jar`
+```
+java -jar oidc-0.0.1.jar
 ```
 
 
