@@ -60,3 +60,26 @@ resource "azurerm_linux_web_app" "example_ase_webapp" {
     "AZURE_IDENTITY_CLIENT_ID" : azurerm_user_assigned_identity.example_ase_mi.client_id
   }
 }
+
+resource "azurerm_linux_web_app" "example_ase_webapp_java" {
+  name                = "${var.azure.prefix}-example-ase-java-app"
+  resource_group_name = azurerm_resource_group.example_ase_rg.name
+  location            = azurerm_service_plan.example_ase_sp.location
+  service_plan_id     = azurerm_service_plan.example_ase_sp.id
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.example_ase_mi.id]
+  }
+  site_config {
+    application_stack {
+      java_server         = "JAVA"
+      java_server_version = 17
+      java_version        = 17
+    }
+  }
+  app_settings = {
+    "MONGODB_URI" : mongodbatlas_cluster.example_cluster.srv_address,
+    "AZURE_APP_CLIENT_ID" : azuread_application_registration.programmatic_app_reg.client_id
+    "AZURE_IDENTITY_CLIENT_ID" : azurerm_user_assigned_identity.example_ase_mi.client_id
+  }
+}

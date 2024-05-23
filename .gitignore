@@ -2,3 +2,6 @@
 archive
 *tfstate*
 *.tfvars.json
+.vscode
+target
+dependency-reduced-pom.xml
