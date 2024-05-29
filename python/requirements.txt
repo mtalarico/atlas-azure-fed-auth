@@ -1,2 +1,2 @@
-git+https://github.com/mongodb/mongo-python-driver.git
+pymongo
 azure-identity

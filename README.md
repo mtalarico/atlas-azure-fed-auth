@@ -65,7 +65,7 @@ ssh root@127.0.0.1 -p ${OUTPUT_PORT}
 3. Copy over oidc.py and requirements.txt
 4. Install required dependencies
 ```
-apt update && apt install git wget -y && pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 5. Run oidc.py
 ```
