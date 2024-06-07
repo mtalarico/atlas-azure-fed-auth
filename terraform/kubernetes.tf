@@ -10,7 +10,7 @@ resource "kubernetes_service_account" "example_aks_sa" {
 
 resource "kubernetes_pod" "example_aks_pod" {
   metadata {
-    name      = "${var.azure.prefix}-example-aks-python-app"
+    name      = "${var.azure.prefix}-example-aks-app"
     namespace = "default"
     labels = {
       "azure.workload.identity/use" : "true"
@@ -20,7 +20,8 @@ resource "kubernetes_pod" "example_aks_pod" {
   spec {
     service_account_name = "${var.azure.prefix}-example-aks-sa"
     container {
-      image = "aypexe/workload-test"
+      # image = "aypexe/workload-test:python" # USER FOR PYTHON
+      image = "aypexe/workload-test:java"
       name  = "workload-test"
 
       env {

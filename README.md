@@ -1,5 +1,6 @@
 # atlas-azure-fed-auth
 Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
+# WARNING: Federated Identity GA broke the automated Atlas Database user atlas, all Atlas actions except the project and cluster creation must be done manually until the Terraform Provider is updated
 
 ## Prerequisites
 - Azure CLI
@@ -43,7 +44,7 @@ terraform apply
 ```
 6. Wait to finish provisioning…
     - Note: ASE took on average 3.5 hours to provision, you can watch Godfather II during this time
-8. Manually update federation settings for MongoDB Atlas to match app registration
+7. Manually update federation settings for MongoDB Atlas to match app registration
 
 
 ## Workforce
@@ -77,7 +78,7 @@ python3 oidc.py
 ```
 mvn clean package
 ```
-3. Open connection to ASE
+2. Open connection to ASE
 ```
 az webapp create-remote-connection  --resource-group ${AZURE_PREFIX}-example-ase-rg --name ${AZURE_PREFIX}-example-ase-python-app
 ```
@@ -85,14 +86,14 @@ az webapp create-remote-connection  --resource-group ${AZURE_PREFIX}-example-ase
 ```
 ssh root@127.0.0.1 -p ${OUTPUT_PORT}
 ```
-4. Copy over `oidc-0.0.1.jar`
-6. Run `oidc-0.0.1.jar`
+4. Copy over `java/target/oidc-0.0.1.jar`
+5. Run `oidc-0.0.1.jar`
 ```
 java -jar oidc-0.0.1.jar
 ```
 
 
-## Workload - AKS
+## Workload - AKS - Python
 1. Open connection to AKS
 ```
 kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
@@ -100,4 +101,22 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 2. Run oidc.py
 ```
 python3 oidc.py
+```
+
+## Workload - AKS - Java
+1. Open connection to AKS
+```
+kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+```
+2. Build the jar
+```
+./mvnw clean package
+```
+3. Run
+```
+./mvnw clean package
+```
+4. Run `oidc-0.0.1.jar`
+```
+java -jar oidc-0.0.1.jar
 ```

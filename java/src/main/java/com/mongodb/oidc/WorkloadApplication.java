@@ -1,6 +1,14 @@
 package com.mongodb.oidc;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 import com.azure.core.credential.AccessToken;
 import com.azure.core.credential.TokenRequestContext;
@@ -16,68 +24,84 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+@SpringBootApplication
 public class WorkloadApplication {
+
+	private static final Logger logger = LoggerFactory.getLogger(WorkloadApplication.class);
+
+	@Value("${mongodb.uri}")
+	private String mongodbUri;
+
+	@Value("${azure.client-id}")
+	private String clientId;
+
+	@Value("${azure.app-id}")
+	private String appId;
+
 	public static void main(String[] args) {
-
-		String MONGODB_URI = System.getenv("MONGODB_URI");
-		String CLIENT_ID = System.getenv("AZURE_IDENTITY_CLIENT_ID");
-		String APP_ID = System.getenv("AZURE_APP_CLIENT_ID");
-
-		if (MONGODB_URI == null || CLIENT_ID == null || APP_ID == null) {
-			System.out.println("One or more environment variables are not set.");
-			System.exit(1);
-		}
-
-		OidcCallback callback = (context) -> {
-			DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder()
-					.managedIdentityClientId(CLIENT_ID)
-					.build();
-			AccessToken token = defaultCredential
-					.getTokenSync(new TokenRequestContext().addScopes(String.format("api://%s/.default", APP_ID)));
-			return new OidcCallbackResult(token.getToken());
-		};
-
-		MongoCredential credential = MongoCredential.createOidcCredential(null).withMechanismProperty("OIDC_CALLBACK",
-				callback);
-
-		MongoClientSettings clientBuilder = MongoClientSettings.builder()
-				.applyConnectionString(new ConnectionString(MONGODB_URI))
-				.credential(credential)
-				.build();
-		try (MongoClient client = MongoClients.create(clientBuilder)) {
-			// Ping the server
-			MongoDatabase adminDb = client.getDatabase("admin");
-			Document ping = new Document("ping", 1);
-			adminDb.runCommand(ping);
-
-			// Successfully connected message
-			System.out.println("----------------------------------");
-			System.out.println("Successfully connected to MongoDB!\n");
-			System.out.println("----------------------------------");
-
-			// Listing DB names
-			System.out.println("Listing DB Names");
-			for (String dbName : client.listDatabaseNames()) {
-				System.out.println("DB: " + dbName);
-			}
-			System.out.println("----------------------------------");
-
-			// Accessing a collection
-			MongoDatabase testDb = client.getDatabase("test");
-			MongoCollection<Document> testCollection = testDb.getCollection("foo");
-
-			// Inserting a document
-			Document docToInsert = new Document("foo", "bar test");
-			System.out.println("Inserting sample record: " + docToInsert);
-			testCollection.insertOne(docToInsert);
-			System.out.println("Inserted ID: " + docToInsert.getObjectId("_id").toHexString());
-			System.out.println("----------------------------------");
-
-			// Finding inserted document by _id
-			System.out.println("Finding inserted doc by _id");
-			Document findOneResponse = testCollection.find(new Document("_id", docToInsert.getObjectId("_id"))).first();
-			System.out.println("Find response: " + findOneResponse);
-		}
+		SpringApplication.run(WorkloadApplication.class, args);
 	}
 
+	@Bean
+	public CommandLineRunner commandLineRunner(Environment env) {
+		return args -> {
+			if (mongodbUri == null || clientId == null || appId == null) {
+				logger.info("One or more environment variables are not set.");
+				System.exit(1);
+			}
+
+			OidcCallback callback = (context) -> {
+				DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder()
+						.managedIdentityClientId(clientId)
+						.build();
+				AccessToken token = defaultCredential
+						.getTokenSync(new TokenRequestContext().addScopes(String.format("api://%s/.default", appId)));
+				return new OidcCallbackResult(token.getToken());
+			};
+
+			MongoCredential credential = MongoCredential.createOidcCredential(null).withMechanismProperty(
+					"OIDC_CALLBACK",
+					callback);
+
+			MongoClientSettings clientBuilder = MongoClientSettings.builder()
+					.applyConnectionString(new ConnectionString(mongodbUri))
+					.credential(credential)
+					.build();
+			try (MongoClient client = MongoClients.create(clientBuilder)) {
+				// Ping the server
+				MongoDatabase adminDb = client.getDatabase("admin");
+				Document ping = new Document("ping", 1);
+				adminDb.runCommand(ping);
+
+				// Successfully connected message
+				logger.info("----------------------------------");
+				logger.info("Successfully connected to MongoDB!\n");
+				logger.info("----------------------------------");
+
+				// Listing DB names
+				logger.info("Listing DB Names");
+				for (String dbName : client.listDatabaseNames()) {
+					logger.info("DB: " + dbName);
+				}
+				logger.info("----------------------------------");
+
+				// Accessing a collection
+				MongoDatabase testDb = client.getDatabase("test");
+				MongoCollection<Document> testCollection = testDb.getCollection("foo");
+
+				// Inserting a document
+				Document docToInsert = new Document("foo", "bar test");
+				logger.info("Inserting sample record: " + docToInsert);
+				testCollection.insertOne(docToInsert);
+				logger.info("Inserted ID: " + docToInsert.getObjectId("_id").toHexString());
+				logger.info("----------------------------------");
+
+				// Finding inserted document by _id
+				logger.info("Finding inserted doc by _id");
+				Document findOneResponse = testCollection.find(new Document("_id", docToInsert.getObjectId("_id")))
+						.first();
+				logger.info("Find response: " + findOneResponse);
+			}
+		};
+	}
 }

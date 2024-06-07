@@ -26,29 +26,32 @@ resource "mongodbatlas_cluster" "example_cluster" {
   provider_instance_size_name  = "M10"
 }
 
-resource "mongodbatlas_database_user" "example_human_user" {
-  username           = "${var.atlas.idp_id}/${azuread_group.human_group.object_id}"
-  project_id         = mongodbatlas_project.example_project.id
-  auth_database_name = "admin"
-  oidc_auth_type     = "IDP_GROUP"
+# GA BROKE THIS
+# TODO: fix it
 
-  roles {
-    role_name     = "atlasAdmin"
-    database_name = "admin"
-  }
-}
+# resource "mongodbatlas_database_user" "example_human_user" {
+#   username           = "${var.atlas.idp_id}/${azuread_group.human_group.object_id}"
+#   project_id         = mongodbatlas_project.example_project.id
+#   auth_database_name = "admin"
+#   oidc_auth_type     = "IDP_GROUP"
 
-resource "mongodbatlas_database_user" "example_programmatic_user" {
-  username           = "${var.atlas.idp_id}/${azuread_group.programmatic_group.object_id}"
-  project_id         = mongodbatlas_project.example_project.id
-  auth_database_name = "admin"
-  oidc_auth_type     = "IDP_GROUP"
+#   roles {
+#     role_name     = "atlasAdmin"
+#     database_name = "admin"
+#   }
+# }
 
-  roles {
-    role_name     = "readWriteAnyDatabase"
-    database_name = "admin"
-  }
-}
+# resource "mongodbatlas_database_user" "example_programmatic_user" {
+#   username           = "${var.atlas.idp_id}/${azuread_group.programmatic_group.object_id}"
+#   project_id         = mongodbatlas_project.example_project.id
+#   auth_database_name = "admin"
+#   oidc_auth_type     = "IDP_GROUP"
+
+#   roles {
+#     role_name     = "readWriteAnyDatabase"
+#     database_name = "admin"
+#   }
+# }
 
 # programmatic private endpoint
 

@@ -1,0 +1,5 @@
+mongodb:
+  uri: ${MONGODB_URI}
+azure:
+  client-id: ${AZURE_IDENTITY_CLIENT_ID}
+  app-id: ${AZURE_APP_CLIENT_ID}
