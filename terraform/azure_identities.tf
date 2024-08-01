@@ -1,8 +1,8 @@
-resource "azurerm_user_assigned_identity" "example_ase_mi" {
-  location            = var.azure.region
-  name                = "${var.azure.prefix}-example-ase-mi"
-  resource_group_name = azurerm_resource_group.example_ase_rg.name
-}
+# resource "azurerm_user_assigned_identity" "example_ase_mi" {
+#   location            = var.azure.region
+#   name                = "${var.azure.prefix}-example-ase-mi"
+#   resource_group_name = azurerm_resource_group.example_ase_rg.name
+# }
 
 resource "azurerm_user_assigned_identity" "example_aks_mi" {
   location            = var.azure.region
@@ -27,7 +27,7 @@ resource "azuread_group" "programmatic_group" {
 
   members = [
     azurerm_user_assigned_identity.example_aks_mi.principal_id,
-    azurerm_user_assigned_identity.example_ase_mi.principal_id
+    # azurerm_user_assigned_identity.example_ase_mi.principal_id
   ]
 }
 

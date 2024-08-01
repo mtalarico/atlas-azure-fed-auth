@@ -1,6 +1,13 @@
 # atlas-azure-fed-auth
 Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
-# WARNING: Federated Identity GA broke the automated Atlas Database user atlas, all Atlas actions except the project and cluster creation must be done manually until the Terraform Provider is updated
+
+## Note
+Federated Authentication for the Data Plane is now GA! This repository has been updated to demonstrate the GA terraform behavior. The only remaining manual work that must be done
+is linking and unlinking the Identity Providers in the Atlas Federation Authentication Settings App before users can log in.
+
+This can technically be done automatically, but for simplicity of this example module, it is left as a manual step for the user both upon `terraform apply` and `terraform destroy`.
+Please see the Setup section below for instructions or `atlas_federation.tf:35` for more technical detail.
+
 
 ## Prerequisites
 - Azure CLI
@@ -9,14 +16,6 @@ Terraform + Driver code (currently Python and Java) to establish infrastructure 
 - Kubectl
 - Org Owner for MongoDB Atlas Organization
 - Access to request resources on an active Azure Subscription
-
-## TODO
-- [ ] Automatically register Kubernetes provider
-- [ ] Private Endpoint setup for AKS and ASE
-- [x] ASE: Inject environment variables
-- [x] Automatically deploy pod
-- [x] AKS: Inject environment variables
-- [x] AKS: Custom image with oidc.py
 
 ## Setup
 1. Clone repository
@@ -36,15 +35,18 @@ az login && az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-
 ```
 cp terraform.tfvars.template.json terraform.tfvars.json
 ```
-5. Init and apply infrastructure
+5. Replace values in `terraform.tfvars.json`. Note if using Vault set `vault.enabled = true`, `vault.uri`, and `api_key.vault_path`. If not using Vault set `vault.enabled = false`, `api_key.public_key`, and `api_key.private_key`
+6. Init and apply infrastructure
 ```
 terraform init
 // (optional, depends on your workflow) terraform plan
 terraform apply
 ```
-6. Wait to finish provisioning…
+7. Wait to finish provisioning…
     - Note: ASE took on average 3.5 hours to provision, you can watch Godfather II during this time
-7. Manually update federation settings for MongoDB Atlas to match app registration
+8. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+9. Either link your desired org or select an already linked org's `Configure Access`
+10. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
 
 
 ## Workforce
@@ -120,3 +122,11 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 ```
 java -jar oidc-0.0.1.jar
 ```
+
+## TODO
+- [ ] Automatically register Kubernetes provider
+- [ ] Private Endpoint setup for AKS and ASE
+- [x] ASE: Inject environment variables
+- [x] Automatically deploy pod
+- [x] AKS: Inject environment variables
+- [x] AKS: Custom image with oidc.py

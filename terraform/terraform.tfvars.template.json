@@ -1,12 +1,16 @@
 {
   "vault": {
-    "uri": "http://127.0.0.1:8200",
-    "api_key_path": "mongodbatlas/creds/tf-key"
+    "enabled": true,
+    "uri": "http://127.0.0.1:8200"
+  },
+  "api_key": {
+    "vault_path": "path/to/api_key",
+    "public_key": "",
+    "private_key": ""
   },
   "atlas": {
     "region": "US_EAST",
-    "org_id": "xxxxxxxxxxxxxxxxxxxxxxxx",
-    "idp_id": "xxxxxxxxxxxxxxxxxxxxxxxx"
+    "associated_domains": ["example.com"]
   },
   "azure": {
     "region": "East US",

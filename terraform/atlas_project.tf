@@ -6,7 +6,6 @@ resource "mongodbatlas_project" "example_project" {
   org_id = data.mongodbatlas_roles_org_id.example_org.org_id
 }
 
-
 resource "mongodbatlas_cluster" "example_cluster" {
   project_id   = mongodbatlas_project.example_project.id
   name         = "example-cluster"
@@ -26,32 +25,29 @@ resource "mongodbatlas_cluster" "example_cluster" {
   provider_instance_size_name  = "M10"
 }
 
-# GA BROKE THIS
-# TODO: fix it
+resource "mongodbatlas_database_user" "example_human_user" {
+  username           = "${mongodbatlas_federated_settings_identity_provider.workforce.idp_id}/${azuread_group.human_group.object_id}"
+  project_id         = mongodbatlas_project.example_project.id
+  auth_database_name = "admin"
+  oidc_auth_type     = "IDP_GROUP"
 
-# resource "mongodbatlas_database_user" "example_human_user" {
-#   username           = "${var.atlas.idp_id}/${azuread_group.human_group.object_id}"
-#   project_id         = mongodbatlas_project.example_project.id
-#   auth_database_name = "admin"
-#   oidc_auth_type     = "IDP_GROUP"
+  roles {
+    role_name     = "atlasAdmin"
+    database_name = "admin"
+  }
+}
 
-#   roles {
-#     role_name     = "atlasAdmin"
-#     database_name = "admin"
-#   }
-# }
+resource "mongodbatlas_database_user" "example_programmatic_user" {
+  username           = "${mongodbatlas_federated_settings_identity_provider.workload.idp_id}/${azuread_group.programmatic_group.object_id}"
+  project_id         = mongodbatlas_project.example_project.id
+  auth_database_name = "admin"
+  oidc_auth_type     = "IDP_GROUP"
 
-# resource "mongodbatlas_database_user" "example_programmatic_user" {
-#   username           = "${var.atlas.idp_id}/${azuread_group.programmatic_group.object_id}"
-#   project_id         = mongodbatlas_project.example_project.id
-#   auth_database_name = "admin"
-#   oidc_auth_type     = "IDP_GROUP"
-
-#   roles {
-#     role_name     = "readWriteAnyDatabase"
-#     database_name = "admin"
-#   }
-# }
+  roles {
+    role_name     = "readWriteAnyDatabase"
+    database_name = "admin"
+  }
+}
 
 # programmatic private endpoint
 

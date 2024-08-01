@@ -1,15 +1,34 @@
 variable "vault" {
+  description = "Vault configuration"
   type = object({
-    uri          = string
-    api_key_path = string
+    enabled = bool
+    uri     = string
   })
+  default = {
+    enabled = false
+    uri     = ""
+  }
+}
+
+variable "api_key" {
+  description = "API Key details, either uses vault_path or manual entry depending on vault.enabled"
+  type = object({
+    vault_path  = string
+    public_key  = string
+    private_key = string
+  })
+  default = {
+    vault_path  = ""
+    public_key  = ""
+    private_key = ""
+  }
+  sensitive = true
 }
 
 variable "atlas" {
   type = object({
-    region = string
-    org_id = string
-    idp_id = string
+    region             = string
+    associated_domains = list(string)
   })
 }
 
