@@ -6,7 +6,7 @@ Federated Authentication for the Data Plane is now GA! This repository has been 
 is linking and unlinking the Identity Providers in the Atlas Federation Authentication Settings App before users can log in.
 
 This can technically be done automatically, but for simplicity of this example module, it is left as a manual step for the user both upon `terraform apply` and `terraform destroy`.
-Please see the Setup section below for instructions or `atlas_federation.tf:35` for more technical detail.
+Please see the Setup section below for instructions or [atlas_federation.tf:35](https://github.com/mtalarico/atlas-azure-fed-auth/blob/29c00b45d9563221236974eaee7f28119c6cdc11/terraform/atlas_federation.tf#L35) for more technical detail.
 
 
 ## Prerequisites
@@ -35,7 +35,9 @@ az login && az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-
 ```
 cp terraform.tfvars.template.json terraform.tfvars.json
 ```
-5. Replace values in `terraform.tfvars.json`. Note if using Vault set `vault.enabled = true`, `vault.uri`, and `api_key.vault_path`. If not using Vault set `vault.enabled = false`, `api_key.public_key`, and `api_key.private_key`
+5. Replace values in `terraform.tfvars.json`.
+    - **If using Vault** set `vault.enabled = true`, `vault.uri`, and `api_key.vault_path`
+    - **If not using Vault** set `vault.enabled = false`, `api_key.public_key`, and `api_key.private_key`
 6. Init and apply infrastructure
 ```
 terraform init
