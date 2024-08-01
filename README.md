@@ -50,6 +50,14 @@ terraform apply
 9. Either link your desired org or select an already linked org's `Configure Access`
 10. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
 
+## Teardown
+1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+2. Either link your desired org or select an already linked org's `Configure Access`
+3. `Manage > Disconnect Identity Provider` for each IdP that is going to be deleted
+4. Destory infrastructure
+```
+terraform destroy
+```
 
 ## Workforce
 1. Login via `mongosh`
