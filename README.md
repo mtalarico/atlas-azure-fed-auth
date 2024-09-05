@@ -29,7 +29,7 @@ export MONGODB_URI="mongodb+srv://example-cluster.knust.mongodb.net"
 ```
 3. Login to Azure CLI
 ```
-az login && az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-rg --name ${AZURE_PREFIX}-example-aks-cluster
+az login
 ```
 4. Create Terraform variables file / input variables
 ```
@@ -46,9 +46,13 @@ terraform apply
 ```
 7. Wait to finish provisioning…
     - Note: ASE took on average 3.5 hours to provision, you can watch Godfather II during this time
-8. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
-9. Either link your desired org or select an already linked org's `Configure Access`
-10. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+8. **Warning:** this will probably error out on the Kubernetes/AKS portion. When it does, run the following and then return `terraform apply` to finish up the K8s portion
+```
+az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-rg --name ${AZURE_PREFIX}-example-aks-cluster
+```
+9. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+10. Either link your desired org or select an already linked org's `Configure Access`
+11. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
 
 ## Teardown
 1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
