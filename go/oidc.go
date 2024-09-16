@@ -18,7 +18,7 @@ var MONGODB_URI string = fmt.Sprintf(
 )
 
 func AzureManagedIdentityCallback(
-	_ context.Context,
+	ctx context.Context,
 	_ *options.OIDCArgs,
 ) (*options.OIDCCredential, error) {
 	appID := os.Getenv("AZURE_APP_CLIENT_ID")
@@ -31,7 +31,7 @@ func AzureManagedIdentityCallback(
 			fmt.Sprintf("api://%s/.default", appID),
 		},
 	}
-	token, err := cred.GetToken(context.Background(), opts)
+	token, err := cred.GetToken(ctx, opts)
 	if err != nil {
 		return nil, nil
 	}
