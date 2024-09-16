@@ -1,4 +1,4 @@
-package oidc
+package main
 
 import (
 	"context"
@@ -12,8 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var APP_ID string = os.Getenv("AZURE_APP_CLIENT_ID")
-var CLIENT_ID string = os.Getenv("AZURE_IDENTITY_CLIENT_ID")
 var MONGODB_URI string = fmt.Sprintf(
     "%s/?authMechanism=MONGODB-OIDC&appName=oidcTest",
 	os.Getenv("MONGODB_URI"),
@@ -23,13 +21,14 @@ func AzureManagedIdentityCallback(
 	_ context.Context,
 	_ *options.OIDCArgs,
 ) (*options.OIDCCredential, error) {
+	appID := os.Getenv("AZURE_APP_CLIENT_ID")
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		return nil, nil
 	}
 	opts := policy.TokenRequestOptions {
 		Scopes: []string {
-			fmt.Sprintf("api//%s/.default", APP_ID),
+			fmt.Sprintf("api://%s/.default", appID),
 		},
 	}
 	token, err := cred.GetToken(context.Background(), opts)
@@ -42,7 +41,7 @@ func AzureManagedIdentityCallback(
 	}, nil
 }
 
-func Main() {
+func main() {
 	opts := options.Client().ApplyURI(MONGODB_URI)
 	opts.Auth.OIDCMachineCallback = AzureManagedIdentityCallback
 	client, err := mongo.Connect(context.Background(), opts)
