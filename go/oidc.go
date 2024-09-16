@@ -24,7 +24,7 @@ func AzureManagedIdentityCallback(
 	appID := os.Getenv("AZURE_APP_CLIENT_ID")
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	opts := policy.TokenRequestOptions {
 		Scopes: []string {
@@ -33,7 +33,7 @@ func AzureManagedIdentityCallback(
 	}
 	token, err := cred.GetToken(ctx, opts)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return &options.OIDCCredential{
 		AccessToken: token.Token,
