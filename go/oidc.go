@@ -49,10 +49,10 @@ func main() {
 		panic(err)
 	}
 
-    fmt.Println("----------------------------------")
-    fmt.Println("Successfully connected to MongoDB!\n")
-    fmt.Println("----------------------------------")
-    fmt.Println("Listing DB Names")
-    fmt.Println("----------------------------------")
+	fmt.Println("----------------------------------")
+	fmt.Println("Successfully connected to MongoDB!\n")
+	fmt.Println("----------------------------------")
+	fmt.Println("Listing DB Names")
+	fmt.Println("----------------------------------")
 	fmt.Println(client.ListDatabaseNames(context.Background(), bson.D{}, nil))
 }
