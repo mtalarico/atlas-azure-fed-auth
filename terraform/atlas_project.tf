@@ -25,17 +25,17 @@ resource "mongodbatlas_cluster" "example_cluster" {
   provider_instance_size_name  = "M10"
 }
 
-resource "mongodbatlas_database_user" "example_human_user" {
-  username           = "${mongodbatlas_federated_settings_identity_provider.workforce.idp_id}/${azuread_group.human_group.object_id}"
-  project_id         = mongodbatlas_project.example_project.id
-  auth_database_name = "admin"
-  oidc_auth_type     = "IDP_GROUP"
-
-  roles {
-    role_name     = "atlasAdmin"
-    database_name = "admin"
-  }
-}
+#resource "mongodbatlas_database_user" "example_human_user" {
+#  username           = "${mongodbatlas_federated_settings_identity_provider.workforce.idp_id}/${azuread_group.human_group.object_id}"
+#  project_id         = mongodbatlas_project.example_project.id
+#  auth_database_name = "admin"
+#  oidc_auth_type     = "IDP_GROUP"
+#
+#  roles {
+#    role_name     = "atlasAdmin"
+#    database_name = "admin"
+#  }
+#}
 
 resource "mongodbatlas_database_user" "example_programmatic_user" {
   username           = "${mongodbatlas_federated_settings_identity_provider.workload.idp_id}/${azuread_group.programmatic_group.object_id}"

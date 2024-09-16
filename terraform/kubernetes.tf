@@ -20,7 +20,8 @@ resource "kubernetes_pod" "example_aks_pod" {
   spec {
     service_account_name = "${var.azure.prefix}-example-aks-sa"
     container {
-      image = "aypexe/workload-test:python" # USE FOR PYTHON
+      image = "pmeredit/test" # USE FOR PYTHON
+      #image = "aypexe/workload-test:python" # USE FOR PYTHON
       # image = "aypexe/workload-test:java" # USE FOR JAVA
       name = "workload-test"
 
