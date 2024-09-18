@@ -50,9 +50,13 @@ terraform apply
 ```
 az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-rg --name ${AZURE_PREFIX}-example-aks-cluster
 ```
-9. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
-10. Either link your desired org or select an already linked org's `Configure Access`
-11. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+9. Run terraform apply again because some parts cannot finish without the az credentials.
+```
+terraform apply
+```
+10. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+11. Either link your desired org or select an already linked org's `Configure Access`
+12. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
 
 ## Teardown
 1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
