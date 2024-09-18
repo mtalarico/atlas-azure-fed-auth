@@ -24,7 +24,7 @@ git clone https://github.com/mtalarico/atlas-azure-fed-auth
 ```
 2. Export variables
 ```
-export AZURE_PREFIX="pm-oidc-test"
+export AZURE_PREFIX="oidc-test"
 export ARM_SUBSCRIPTION_ID="<your azure subscription id>"
 ```
 3. Login to Azure CLI
