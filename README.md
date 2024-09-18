@@ -20,7 +20,7 @@ Please see the Setup/Teardown sections below for instructions or [atlas_federati
 ## Setup
 1. Clone repository
 ```
-git clone https://github.com/pmeredit/atlas-azure-fed-auth
+git clone https://github.com/mtalarico/atlas-azure-fed-auth
 ```
 2. Export variables
 ```
