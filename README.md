@@ -24,8 +24,8 @@ git clone https://github.com/mtalarico/atlas-azure-fed-auth
 ```
 2. Export variables
 ```
-export AZURE_PREFIX="mt-wf"
-export MONGODB_URI="mongodb+srv://example-cluster.knust.mongodb.net"
+export AZURE_PREFIX="pm-oidc-test"
+export ARM_SUBSCRIPTION_ID="<your azure subscription id>"
 ```
 3. Login to Azure CLI
 ```
@@ -112,7 +112,7 @@ java -jar oidc-0.0.1.jar
 ## Workload - AKS - Python
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Run oidc.py
 ```
@@ -122,7 +122,7 @@ python3 oidc.py
 ## Workload - AKS - Java
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Build the jar
 ```
@@ -135,6 +135,21 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 4. Run `oidc-0.0.1.jar`
 ```
 java -jar oidc-0.0.1.jar
+```
+
+## Workload - AKS - Go
+1. Open connection to AKS
+```
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
+```
+2. Run ./oidc
+```
+./oidc
+
+```
+or
+```
+go run oidc.go
 ```
 
 ## TODO
