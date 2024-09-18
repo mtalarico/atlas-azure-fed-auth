@@ -57,6 +57,8 @@ terraform apply
 10. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
 11. Either link your desired org or select an already linked org's `Configure Access`
 12. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+13. Make sure that the kube pod can communicate with Atlas by setting the IP for the pod in the
+    Atlas allowed IPs for the project. It is easiest just to add 0.0.0.0 to the allow list.
 
 ## Teardown
 1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
