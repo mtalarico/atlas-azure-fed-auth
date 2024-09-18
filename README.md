@@ -1,5 +1,3 @@
-Note: forked from mtalarico/atlas-azure-fed-auth to add go support. This may eventually be merged back.
-
 # atlas-azure-fed-auth
 Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
 
