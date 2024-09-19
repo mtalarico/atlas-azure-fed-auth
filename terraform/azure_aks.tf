@@ -14,7 +14,8 @@ resource "azurerm_kubernetes_cluster" "example_aks_cluster" {
   default_node_pool {
     name       = "default"
     node_count = 1
-    vm_size    = "Standard_D2_v2"
+    vm_size    = "Standard_D2pds_v5"
+    temporary_name_for_rotation = "foo"
   }
 
   identity {

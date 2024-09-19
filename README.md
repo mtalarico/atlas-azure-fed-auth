@@ -24,8 +24,8 @@ git clone https://github.com/mtalarico/atlas-azure-fed-auth
 ```
 2. Export variables
 ```
-export AZURE_PREFIX="mt-wf"
-export MONGODB_URI="mongodb+srv://example-cluster.knust.mongodb.net"
+export AZURE_PREFIX="oidc-test"
+export ARM_SUBSCRIPTION_ID="<your azure subscription id>"
 ```
 3. Login to Azure CLI
 ```
@@ -50,9 +50,15 @@ terraform apply
 ```
 az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-rg --name ${AZURE_PREFIX}-example-aks-cluster
 ```
-9. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
-10. Either link your desired org or select an already linked org's `Configure Access`
-11. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+9. Run terraform apply again because some parts cannot finish without the az credentials.
+```
+terraform apply
+```
+10. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+11. Either link your desired org or select an already linked org's `Configure Access`
+12. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+13. Make sure that the kube pod can communicate with Atlas by setting the IP for the pod in the
+    Atlas allowed IPs for the project. It is easiest just to add 0.0.0.0 to the allow list.
 
 ## Teardown
 1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
@@ -112,7 +118,7 @@ java -jar oidc-0.0.1.jar
 ## Workload - AKS - Python
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Run oidc.py
 ```
@@ -122,7 +128,7 @@ python3 oidc.py
 ## Workload - AKS - Java
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Build the jar
 ```
@@ -135,6 +141,21 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 4. Run `oidc-0.0.1.jar`
 ```
 java -jar oidc-0.0.1.jar
+```
+
+## Workload - AKS - Go
+1. Open connection to AKS
+```
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
+```
+2. Run ./oidc
+```
+./oidc
+
+```
+or
+```
+go run oidc.go
 ```
 
 ## TODO

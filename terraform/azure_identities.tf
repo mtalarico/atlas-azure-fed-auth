@@ -31,18 +31,18 @@ resource "azuread_group" "programmatic_group" {
   ]
 }
 
-resource "azuread_group" "human_group" {
-  display_name     = "${var.azure.prefix}-human"
-  owners           = [data.azuread_client_config.current.object_id]
-  security_enabled = true
+#resource "azuread_group" "human_group" {
+#  display_name     = "${var.azure.prefix}-human"
+#  owners           = [data.azuread_client_config.current.object_id]
+#  security_enabled = true
+#
+#  members = [
+#    azuread_user.human_user.id
+#  ]
+#}
 
-  members = [
-    azuread_user.human_user.id
-  ]
-}
-
-resource "azuread_user" "human_user" {
-  user_principal_name = var.azure.human_user_upn
-  display_name        = var.azure.human_user_display_name
-  password            = var.azure.human_user_password
-}
+#resource "azuread_user" "human_user" {
+#  user_principal_name = var.azure.human_user_upn
+#  display_name        = var.azure.human_user_display_name
+#  password            = var.azure.human_user_password
+#}
