@@ -183,7 +183,7 @@ apt-get install libkrb5-dev
 
 5. Now build mongosync
 ```
-go run mage.go build
+cd mongosync && go run mage.go build
 ```
 
 6. We just need to test the connections, so we will use the same source and destination clusters just to confirm they connect successfully
