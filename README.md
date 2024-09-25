@@ -1,5 +1,5 @@
 # atlas-azure-fed-auth
-Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
+Terraform + Driver code (currently Python, Java, and Go with directions for testing mongosync) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
 
 ## Note
 Federated Authentication for the Data Plane is now GA! This repository has been updated to demonstrate the GA terraform behavior. The only remaining manual work that must be done
