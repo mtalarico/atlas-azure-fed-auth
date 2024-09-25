@@ -198,7 +198,7 @@ The user in the terraform is not set up to run all commands, so expect the follo
 {"time":"2024-09-24T18:34:12.706575Z","level":"debug","serverID":"cad79626","mongosyncID":"coordinator","handledError":{"msErrorLabels":["serverError"],"clientType":"destination","database":"admin","operationDescription":"Retrieving replicaSetId from admin database.","failedCommand":"RunCommand","failedRunCommand":"[{replSetGetConfig 1}]","message":"failed to retrieve replicaSetId from admin database: failed to execute a command on the MongoDB server: (Unauthorized) not authorized on admin to execute command { replSetGetConfig: 1, lsid: { id: UUID(\"287a880f-99a7-406a-8eb7-c85ee7d89c4c\") }, $clusterTime: { clusterTime: Timestamp(1727202852, 2), signature: { hash: BinData(0, B1EAEA02625EA39609F04B2785A6D078D48FA235), keyId: 7418240528371679237 } }, maxTimeMS: 300000, $db: \"admin\" }"},"URI":"example-cluster.f23iu.mongodb.net","message":"Could not get clusterID for cluster0; this only impacts telemetry, and does not otherwise affect the migration."}
 
 ```
-It is possible to log into the cluster on cloud.mongodb.com to give necessary permissions to the user to clear up those warnings.
+It is possible to log into the cluster on `cloud.mongodb.com` to give necessary permissions to the user to clear up those warnings.
 
 ## TODO
 - [ ] Automatically register Kubernetes provider
