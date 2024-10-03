@@ -163,7 +163,7 @@ I did not create a separate Docker image for testing mongosync. In general, the 
 but for extra verification, we first need to copy our ssh private key to the kube:
 1. Copy key (on macos it looks like the following, change the local path as necesary for other OS)
 ```
-kubectl cp /Users/<user name>/.ssh/id_rsa  ${AZURE_PREFIX}-example-aks-app:usr/src/app/id_rsa
+kubectl cp /Users/<user name>/.ssh/id_rsa  ${AZURE_PREFIX}-example-aks-app:/root/.ssh/id_rsa
 ```
 
 2. Log into the pod as above:
