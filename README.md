@@ -188,7 +188,7 @@ cd mongosync && go run mage.go build
 
 6. We just need to test the connections, so we will use the same source and destination clusters just to confirm they connect successfully
 ```
-export c="${MONGODB_URI}/?authMechanism=MONGODB-OIDC&appName=oidcTest&authMechanismPropertiesauth&MechanismProperties=ENVIRONMENT:azure"
+export c="${MONGODB_URI}/?authMechanism=MONGODB-OIDC&appName=oidcTest&authMechanismProperties=ENVIRONMENT:azure"
 ./dist/mongosync --cluster0 $c --cluster1 $c
 ```
 The user in the terraform is not set up to run all commands, so expect the following warnings and other failures with regars to `replSetGetConfig`, but other commands will issue successully:
