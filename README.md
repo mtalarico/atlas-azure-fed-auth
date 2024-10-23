@@ -1,5 +1,5 @@
 # atlas-azure-fed-auth
-Terraform + Driver code (currently Python and Java) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
+Terraform + Driver code (currently Python, Java, and Go with directions for testing mongosync) to establish infrastructure on MongoDB Atlas and Microsoft Azure for Workforce and Workload Federated Database Authentication
 
 ## Note
 Federated Authentication for the Data Plane is now GA! This repository has been updated to demonstrate the GA terraform behavior. The only remaining manual work that must be done
@@ -24,8 +24,8 @@ git clone https://github.com/mtalarico/atlas-azure-fed-auth
 ```
 2. Export variables
 ```
-export AZURE_PREFIX="mt-wf"
-export MONGODB_URI="mongodb+srv://example-cluster.knust.mongodb.net"
+export AZURE_PREFIX="oidc-test"
+export ARM_SUBSCRIPTION_ID="<your azure subscription id>"
 ```
 3. Login to Azure CLI
 ```
@@ -50,9 +50,15 @@ terraform apply
 ```
 az aks get-credentials --resource-group ${AZURE_PREFIX}-example-aks-rg --name ${AZURE_PREFIX}-example-aks-cluster
 ```
-9. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
-10. Either link your desired org or select an already linked org's `Configure Access`
-11. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+9. Run terraform apply again because some parts cannot finish without the az credentials.
+```
+terraform apply
+```
+10. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
+11. Either link your desired org or select an already linked org's `Configure Access`
+12. `Connect Identity Providers`, selecting the Workforce and Workload IdPs
+13. Make sure that the kube pod can communicate with Atlas by setting the IP for the pod in the
+    Atlas allowed IPs for the project. It is easiest just to add 0.0.0.0 to the allow list.
 
 ## Teardown
 1. Navigate to `Atlas Org Settings > Open Federation Management App > Linked Organizations`
@@ -112,7 +118,7 @@ java -jar oidc-0.0.1.jar
 ## Workload - AKS - Python
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Run oidc.py
 ```
@@ -122,7 +128,7 @@ python3 oidc.py
 ## Workload - AKS - Java
 1. Open connection to AKS
 ```
-kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
 ```
 2. Build the jar
 ```
@@ -135,6 +141,66 @@ kubectl exec -it ${AZURE_PREFIX}-example-aks-python-app -- /bin/bash
 4. Run `oidc-0.0.1.jar`
 ```
 java -jar oidc-0.0.1.jar
+```
+
+## Workload - AKS - Go
+1. Open connection to AKS
+```
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
+```
+2. Run ./oidc
+```
+./oidc
+
+```
+or
+```
+go run oidc.go
+```
+
+### Testing mongosync
+I did not create a separate Docker image for testing mongosync. In general, the oidc go test above shows that mongosync will work,
+but for extra verification, we first need to copy our ssh private key to the kube:
+1. Copy key (on macos it looks like the following, change the local path as necesary for other OS)
+```
+kubectl cp /Users/<user name>/.ssh/id_rsa  ${AZURE_PREFIX}-example-aks-app:/root/.ssh/id_rsa
+```
+
+2. Log into the pod as above:
+```
+kubectl exec -it ${AZURE_PREFIX}-example-aks-app -- /bin/bash
+```
+
+3. Clone the repo:
+```
+git clone git@github.com:10gen/mongosync
+```
+
+4. In order to build mongosync, we need to install gsappi (the go driver requires it)
+```
+apt-get install libkrb5-dev
+```
+
+5. Now build mongosync
+```
+cd mongosync && go run mage.go build
+```
+
+6. We just need to test the connections, so we will use the same source and destination clusters just to confirm they connect successfully
+```
+export c="${MONGODB_URI}/?authMechanism=MONGODB-OIDC&appName=oidcTest&authMechanismProperties=ENVIRONMENT:azure"
+./dist/mongosync --cluster0 $c --cluster1 $c
+```
+The user in the terraform is not set up to run all commands, so expect the following warnings and other failures with regars to `replSetGetConfig`, but other commands will issue successully:
+```
+{"time":"2024-09-24T18:34:12.706204Z","level":"debug","serverID":"cad79626","mongosyncID":"coordinator","clusterType":"dst","isDriverLog":true,"driverCommand":"replSetGetConfig","connectionID":"example-cluster-shard-00-02.f23iu.mongodb.net:27017[-7]","duration":"775.198µs","requestID":44,"failure":"(Unauthorized) not authorized on admin to execute command { replSetGetConfig: 1, lsid: { id: UUID(\"287a880f-99a7-406a-8eb7-c85ee7d89c4c\") }, $clusterTime: { clusterTime: Timestamp(1727202852, 2), signature: { hash: BinData(0, B1EAEA02625EA39609F04B2785A6D078D48FA235), keyId: 7418240528371679237 } }, maxTimeMS: 300000, $db: \"admin\" }","serverConnectionID":1726,"message":"Command failed."}
+{"time":"2024-09-24T18:34:12.706493Z","level":"debug","serverID":"cad79626","mongosyncID":"coordinator","operationID":"9e52a6aa","clientType":"destination","database":"admin","operationDescription":"Retrieving replicaSetId from admin database.","attemptNumber":0,"totalTimeSpent":"880ns","retryAttemptDurationSoFarSecs":0,"retryAttemptDurationLimitSecs":600,"handledError":{"msErrorLabels":["serverError"],"clientType":"destination","database":"admin","failedCommand":"RunCommand","failedRunCommand":"[{replSetGetConfig 1}]","message":"failed to execute a command on the MongoDB server: (Unauthorized) not authorized on admin to execute command { replSetGetConfig: 1, lsid: { id: UUID(\"287a880f-99a7-406a-8eb7-c85ee7d89c4c\") }, $clusterTime: { clusterTime: Timestamp(1727202852, 2), signature: { hash: BinData(0, B1EAEA02625EA39609F04B2785A6D078D48FA235), keyId: 7418240528371679237 } }, maxTimeMS: 300000, $db: \"admin\" }"},"message":"Not retrying on error because it is not transient nor is it in our additional codes list."}
+{"time":"2024-09-24T18:34:12.706575Z","level":"debug","serverID":"cad79626","mongosyncID":"coordinator","handledError":{"msErrorLabels":["serverError"],"clientType":"destination","database":"admin","operationDescription":"Retrieving replicaSetId from admin database.","failedCommand":"RunCommand","failedRunCommand":"[{replSetGetConfig 1}]","message":"failed to retrieve replicaSetId from admin database: failed to execute a command on the MongoDB server: (Unauthorized) not authorized on admin to execute command { replSetGetConfig: 1, lsid: { id: UUID(\"287a880f-99a7-406a-8eb7-c85ee7d89c4c\") }, $clusterTime: { clusterTime: Timestamp(1727202852, 2), signature: { hash: BinData(0, B1EAEA02625EA39609F04B2785A6D078D48FA235), keyId: 7418240528371679237 } }, maxTimeMS: 300000, $db: \"admin\" }"},"URI":"example-cluster.f23iu.mongodb.net","message":"Could not get clusterID for cluster0; this only impacts telemetry, and does not otherwise affect the migration."}
+
+```
+It is possible to log into the cluster on `cloud.mongodb.com` to give necessary permissions to the user to clear up those warnings. If there is any desire to modify the code for mongosync, vim can be installed on the pod easily:
+```
+apt-get install vim
 ```
 
 ## TODO

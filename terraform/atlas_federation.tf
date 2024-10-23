@@ -2,21 +2,21 @@ data "mongodbatlas_federated_settings" "this" {
   org_id = data.mongodbatlas_roles_org_id.example_org.org_id
 }
 
-resource "mongodbatlas_federated_settings_identity_provider" "workforce" {
-  federation_settings_id = data.mongodbatlas_federated_settings.this.id
-  associated_domains     = var.atlas.associated_domains
-  audience               = azuread_application_registration.human_app_reg.client_id
-  authorization_type     = "GROUP"
-  client_id              = azuread_application_registration.human_app_reg.client_id
-  description            = "Workforce Identity for human users via Azure Entra ID as an OIDC IdP"
-  issuer_uri             = "https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}/v2.0"
-  idp_type               = "WORKFORCE"
-  name                   = "Azure Entra ID - Human"
-  protocol               = "OIDC"
-  requested_scopes       = ["openid", "${azuread_application_registration.human_app_reg.client_id}/.default"]
-  groups_claim           = "groups"
-  user_claim             = "upn"
-}
+#resource "mongodbatlas_federated_settings_identity_provider" "workforce" {
+#  federation_settings_id = data.mongodbatlas_federated_settings.this.id
+#  associated_domains     = var.atlas.associated_domains
+#  audience               = azuread_application_registration.human_app_reg.client_id
+#  authorization_type     = "GROUP"
+#  client_id              = azuread_application_registration.human_app_reg.client_id
+#  description            = "Workforce Identity for human users via Azure Entra ID as an OIDC IdP"
+#  issuer_uri             = "https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}/v2.0"
+#  idp_type               = "WORKFORCE"
+#  name                   = "Azure Entra ID - Human"
+#  protocol               = "OIDC"
+#  requested_scopes       = ["openid", "${azuread_application_registration.human_app_reg.client_id}/.default"]
+#  groups_claim           = "groups"
+#  user_claim             = "upn"
+#}
 
 resource "mongodbatlas_federated_settings_identity_provider" "workload" {
   federation_settings_id = data.mongodbatlas_federated_settings.this.id
